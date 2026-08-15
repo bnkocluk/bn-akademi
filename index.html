@@ -1,0 +1,31 @@
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BN Akademi</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7f4;color:#26342d;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}header{background:#fff;padding:20px 15px;border-bottom:1px solid #dfe6df;position:sticky;top:0;z-index:2}.brand{font-size:25px;font-weight:800}.sub{font-size:13px;color:#758078;margin-top:4px}nav{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:14px}nav a{text-decoration:none;text-align:center;color:#33433a;background:#eef3ee;padding:10px 5px;border-radius:9px;font-size:13px;font-weight:700}main{max-width:760px;margin:auto;padding:20px 15px}.page{display:none}.page.active{display:block}h1{font-size:26px;margin:0 0 5px}.panel{background:#fff;border:1px solid #dfe6df;border-radius:15px;padding:17px;margin-top:15px}label{display:block;font-size:12px;color:#68756e;margin-bottom:12px}input,select,textarea{width:100%;margin-top:6px;padding:11px;border:1px solid #dce4dc;border-radius:9px;font:inherit}.btn{border:0;background:#33483d;color:#fff;border-radius:9px;padding:11px 14px;font-weight:700}.student{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0ed}.empty{text-align:center;color:#77837c;padding:25px}.form{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px}.full{grid-column:1/-1}@media(max-width:520px){.form{grid-template-columns:1fr}.full{grid-column:auto}}
+</style></head><body>
+<header><div class="brand">BN AKADEMİ</div><div class="sub">Filiz ve Hedef · Koçluk Sistemi</div>
+<nav><a href="#home">🏠 Ana Panel</a><a href="#students">👥 Öğrenciler</a><a href="#add">➕ Öğrenci Ekle</a><a href="#plan">📅 Plan & Görev</a><a href="#topics">📚 Konu Takibi</a><a href="#exams">📝 Denemeler</a><a href="#errors">❌ Yanlış & Telafi</a><a href="#reports">📈 Raporlar</a></nav></header>
+<main>
+<section id="home" class="page"><h1>Ana Panel</h1><div class="sub">BN Akademi Koçluk Sistemi</div><div class="panel"><b>Toplam Öğrenci: <span id="count">0</span></b></div></section>
+<section id="students" class="page"><h1>Öğrenciler</h1><div class="sub">Kayıtlı öğrencilerin.</div><div class="panel" id="list"></div></section>
+<section id="add" class="page"><h1>Öğrenci Ekle</h1><div class="panel"><div class="form">
+<label>Ad Soyad<input id="name"></label><label>Program<select id="program"><option>LGS</option><option>YKS</option></select></label>
+<label>Sınıf / Durum<input id="grade"></label><label>Hedef<input id="goal"></label>
+<label>Veli Adı<input id="parent"></label><label>Veli Telefonu<input id="phone"></label>
+<label class="full">Koç Notu<textarea id="note" rows="4"></textarea></label></div>
+<button class="btn" id="save">Öğrenciyi Kaydet</button><div id="msg"></div></div></section>
+<section id="profile" class="page"><h1 id="pname">Profil</h1><div id="pmeta" class="sub"></div><div class="panel"><p><b>Hedef:</b> <span id="pgoal"></span></p><p><b>Veli:</b> <span id="pparent"></span></p><p><b>Telefon:</b> <span id="pphone"></span></p><p><b>Koç Notu:</b> <span id="pnote"></span></p></div></section>
+<section id="plan" class="page"><h1>Plan & Görev</h1><div class="panel">Bu modül sonraki aşamada bağlanacak.</div></section>
+<section id="topics" class="page"><h1>Konu Takibi</h1><div class="panel">Bu modül sonraki aşamada bağlanacak.</div></section>
+<section id="exams" class="page"><h1>Denemeler</h1><div class="panel">Bu modül sonraki aşamada bağlanacak.</div></section>
+<section id="errors" class="page"><h1>Yanlış & Telafi</h1><div class="panel">Bu modül sonraki aşamada bağlanacak.</div></section>
+<section id="reports" class="page"><h1>Raporlar</h1><div class="panel">Bu modül sonraki aşamada bağlanacak.</div></section>
+</main>
+<script>
+const K="BN_AKADEMI_STUDENTS",S=JSON.parse(localStorage.getItem(K)||"[]"),$=id=>document.getElementById(id),E=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function render(){ $("count").textContent=S.length; $("list").innerHTML=S.length?S.map((s,i)=>'<div class="student"><div><b>'+E(s.name)+'</b><div class="sub">'+E(s.program)+' · '+E(s.grade)+' · '+E(s.goal)+'</div></div><button class="btn" onclick="openP('+i+')">Profili Aç</button></div>').join(""):'<div class="empty">Henüz öğrenci yok.<br><br><a href="#add">İlk öğrenciyi ekle →</a></div>'; }
+function openP(i){let s=S[i];$("pname").textContent=s.name;$("pmeta").textContent=s.program+" · "+s.grade;$("pgoal").textContent=s.goal;$("pparent").textContent=s.parent||"—";$("pphone").textContent=s.phone||"—";$("pnote").textContent=s.note||"—";location.hash="#profile";}
+$("save").onclick=()=>{let n=$("name").value.trim();if(!n){$("msg").textContent="Ad Soyad gerekli.";return}S.push({name:n,program:$("program").value,grade:$("grade").value||"—",goal:$("goal").value||"—",parent:$("parent").value||"—",phone:$("phone").value||"—",note:$("note").value||""});localStorage.setItem(K,JSON.stringify(S));$("msg").textContent="Öğrenci kaydedildi ✓";setTimeout(()=>location.hash="#students",300);};
+function show(){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));let id=location.hash.slice(1)||"home";($(id)||$("home")).classList.add("active");render()}addEventListener("hashchange",show);show();
+</script></body></html>
